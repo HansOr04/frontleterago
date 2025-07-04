@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-white text-slate-900 font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  /* Botones del header */
+  .header-nav-button {
+    @apply px-6 py-2 text-slate-700 hover:text-leterago-primary transition-colors duration-200 font-medium;
+  }
+
+  .header-nav-button.active {
+    @apply text-leterago-primary border-b-2 border-leterago-primary;
+  }
+
+  /* Estilos para la matriz */
+  .matrix-cell {
+    @apply p-4 text-white text-center text-sm font-medium transition-all duration-200 hover:scale-105 cursor-pointer;
+  }
+
+  .matrix-header {
+    @apply p-4 text-white text-center font-bold text-base;
+  }
+
+  /* Gradientes para las categorías */
+  .matrix-org {
+    @apply bg-gradient-to-br from-matrix-blue-1 to-matrix-blue-2;
+  }
+
+  .matrix-people {
+    @apply bg-gradient-to-br from-matrix-blue-2 to-matrix-blue-3;
+  }
+
+  .matrix-physical {
+    @apply bg-gradient-to-br from-matrix-blue-3 to-matrix-blue-4;
+  }
+
+  .matrix-tech {
+    @apply bg-gradient-to-br from-matrix-blue-4 to-matrix-blue-5;
+  }
+
+  /* Estilos para las normativas */
+  .normativa-cat-1 {
+    @apply bg-gradient-to-r from-leterago-primary to-blue-700;
+  }
+
+  .normativa-cat-2 {
+    @apply bg-gradient-to-r from-blue-700 to-blue-600;
+  }
+
+  .normativa-cat-3 {
+    @apply bg-gradient-to-r from-blue-600 to-blue-500;
+  }
+
+  .normativa-cat-4 {
+    @apply bg-gradient-to-r from-blue-500 to-blue-400;
+  }
+
+  .normativa-cat-5 {
+    @apply bg-gradient-to-r from-blue-400 to-blue-300;
+  }
+
+  .normativa-cat-6 {
+    @apply bg-gradient-to-r from-blue-300 to-blue-200;
+  }
+
+  .normativa-cat-7 {
+    @apply bg-gradient-to-r from-blue-200 to-blue-100;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply inline-block w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200;
+  }
+
+  /* Sidebar navigation */
+  .sidebar-nav {
+    @apply w-64 bg-gray-50 border-r border-gray-200 min-h-screen;
+  }
+
+  .sidebar-nav-item {
+    @apply block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-leterago-primary transition-colors duration-200 border-b border-gray-100;
+  }
+
+  .sidebar-nav-item.active {
+    @apply bg-blue-50 text-leterago-primary font-medium border-r-2 border-leterago-primary;
+  }
+
+  /* Architecture diagram styles */
+  .soc-diagram {
+    @apply flex items-center justify-center min-h-96;
+  }
+
+  .soc-node {
+    @apply rounded-lg px-6 py-4 text-white font-bold text-center shadow-lg transition-transform duration-300 hover:scale-110 cursor-pointer;
+  }
+
+  .soc-center {
+    @apply bg-slate-800 text-2xl;
+  }
+
+  .soc-checkpoint {
+    @apply bg-gradient-to-r from-pink-500 to-pink-600;
+  }
+
+  .soc-trellix {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-500;
+  }
+
+  .soc-azure {
+    @apply bg-gradient-to-r from-blue-600 to-blue-700;
+  }
+
+  .soc-threat {
+    @apply bg-gradient-to-r from-indigo-600 to-indigo-800;
+  }
+
+  .soc-connection {
+    @apply w-16 h-0.5 bg-gray-400;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Hover effects para la matriz */
+.matrix-cell:hover {
+  @apply shadow-xl;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Responsive breakpoints personalizados */
+@media (max-width: 768px) {
+  .matrix-cell {
+    @apply text-xs p-2;
+  }
+  
+  .matrix-header {
+    @apply text-sm p-2;
+  }
+}

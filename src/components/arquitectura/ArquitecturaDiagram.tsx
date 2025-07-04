@@ -1,0 +1,1 @@
+///ArquitecturaDiagram.tsx vacio
