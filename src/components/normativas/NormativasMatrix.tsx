@@ -5,6 +5,7 @@ import type { Normativa } from '../../types/normativas.types';
 import Loading from '../common/Loading';
 import { ErrorMessage } from '../common/ErrorBoundary';
 import { NORMATIVA_CATEGORY_COLORS, NORMATIVAS_CATEGORIES } from '../../utils/constants';
+import { calculateDaysUntil } from '../../utils/helpers';
 import NormativaDetail from './NormativaDetail';
 
 const NormativasMatrix: React.FC = () => {
@@ -20,6 +21,20 @@ const NormativasMatrix: React.FC = () => {
     proximasAVencer: 0
   });
 
+  // Mejorar los colores con mejor contraste
+  const getImprovedColorClass = (index: number) => {
+    const improvedColors = [
+      'from-blue-600 to-blue-700',      // Organización y Contexto
+      'from-indigo-600 to-indigo-700',  // Liderazgo
+      'from-purple-600 to-purple-700',  // Planificación
+      'from-cyan-600 to-cyan-700',      // Soporte
+      'from-teal-600 to-teal-700',      // Operación
+      'from-emerald-600 to-emerald-700', // Evaluación del Desempeño
+      'from-blue-700 to-blue-800',      // Mejora (más oscuro)
+    ];
+    return improvedColors[index % improvedColors.length];
+  };
+
   // Cargar normativas
   const loadNormativas = async () => {
     try {
@@ -29,23 +44,44 @@ const NormativasMatrix: React.FC = () => {
       const response = await normativasService.getAllNormativas();
       
       if (response.success && response.data) {
-        setNormativas(response.data);
+        // Fix: Handle different response structures
+        let normativasData: Normativa[] = [];
+        const data = response.data as any; // Type assertion to handle unknown structure
+        
+        if (Array.isArray(data)) {
+          // If data is directly an array
+          normativasData = data as Normativa[];
+        } else if (data.normativas && Array.isArray(data.normativas)) {
+          // If data has a normativas property that is an array
+          normativasData = data.normativas as Normativa[];
+        } else if (data.data && Array.isArray(data.data)) {
+          // If data has a data property that is an array
+          normativasData = data.data as Normativa[];
+        } else {
+          console.error('Unexpected response structure:', data);
+          throw new Error('Formato de respuesta inesperado del servidor');
+        }
+        
+        setNormativas(normativasData);
         
         // Calcular estadísticas básicas
         const today = new Date();
-        const vencidas = response.data.filter(n => new Date(n.fechaVencimiento) < today).length;
-        const proximasAVencer = response.data.filter(n => {
-          const days = Math.ceil((new Date(n.fechaVencimiento).getTime() - today.getTime()) / (1000 * 3600 * 24));
+        const vencidas = normativasData.filter(n => new Date(n.fechaVencimiento) < today).length;
+        const proximasAVencer = normativasData.filter(n => {
+          const days = calculateDaysUntil(n.fechaVencimiento);
           return days > 0 && days <= 30;
         }).length;
         
         setStats({
-          total: response.data.length,
+          total: normativasData.length,
           vencidas,
           proximasAVencer
         });
+      } else {
+        throw new Error('No se recibieron datos válidos del servidor');
       }
     } catch (err: any) {
+      console.error('Error loading normativas:', err);
       setError(err.message || 'Error al cargar las normativas');
     } finally {
       setLoading(false);
@@ -58,7 +94,10 @@ const NormativasMatrix: React.FC = () => {
 
   // Agrupar normativas por categoría
   const groupedNormativas = NORMATIVAS_CATEGORIES.map((categoria, index) => {
-    const categoriaNormativas = normativas.filter(normativa => {
+    // Add safety check to ensure normativas is an array
+    const normativasArray = Array.isArray(normativas) ? normativas : [];
+    
+    const categoriaNormativas = normativasArray.filter(normativa => {
       const matchesCategory = normativa.categoria === categoria;
       const matchesSearch = !searchTerm || 
         normativa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -71,7 +110,7 @@ const NormativasMatrix: React.FC = () => {
     return {
       categoria,
       normativas: categoriaNormativas,
-      colorClass: NORMATIVA_CATEGORY_COLORS[index % NORMATIVA_CATEGORY_COLORS.length],
+      colorClass: getImprovedColorClass(index), // Usar los colores mejorados
       count: categoriaNormativas.length
     };
   }).filter(group => group.count > 0 || !selectedCategory);
@@ -88,9 +127,7 @@ const NormativasMatrix: React.FC = () => {
 
   // Calcular estado de vencimiento
   const getEstadoVencimiento = (fechaVencimiento: Date) => {
-    const today = new Date();
-    const vencimiento = new Date(fechaVencimiento);
-    const diasHasta = Math.ceil((vencimiento.getTime() - today.getTime()) / (1000 * 3600 * 24));
+    const diasHasta = calculateDaysUntil(fechaVencimiento);
     
     if (diasHasta < 0) return 'vencida';
     if (diasHasta <= 7) return 'critica';
@@ -115,7 +152,7 @@ const NormativasMatrix: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-4">
@@ -199,65 +236,68 @@ const NormativasMatrix: React.FC = () => {
       </div>
 
       {/* Matriz de normativas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {groupedNormativas.map((group) => (
-          <div key={group.categoria} className="space-y-2">
-            {/* Header de categoría */}
-            <div className={`matrix-header ${group.colorClass}`}>
-              <h3 className="font-bold text-center text-white">{group.categoria}</h3>
-              <p className="text-xs text-center opacity-90 mt-1 text-white">
-                {group.count} normativas
-              </p>
-            </div>
+      <div className="flex justify-center w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-6 w-full max-w-none">
+          {groupedNormativas.map((group) => (
+            <div key={group.categoria} className="space-y-4 w-full">
+              {/* Header de categoría */}
+              <div className={`bg-gradient-to-br ${group.colorClass} rounded-xl p-4 text-center shadow-lg border border-white/20`}>
+                <h3 className="font-bold text-white text-base drop-shadow-sm">{group.categoria}</h3>
+                <p className="text-sm text-white/90 mt-1 font-medium">
+                  {group.count} normativas
+                </p>
+              </div>
 
-            {/* Normativas de la categoría */}
-            <div className="space-y-2">
-              {group.normativas.map((normativa) => {
-                const estado = getEstadoVencimiento(normativa.fechaVencimiento);
-                return (
-                  <div
-                    key={normativa._id}
-                    onClick={() => handleNormativaClick(normativa)}
-                    className={`matrix-cell ${group.colorClass} cursor-pointer hover:shadow-lg transition-all duration-200 relative`}
-                    style={{ minHeight: '100px' }}
-                  >
-                    {/* Indicador de estado */}
-                    <div className={`absolute top-2 right-2 w-3 h-3 rounded-full ${
-                      estado === 'vencida' ? 'bg-red-500' :
-                      estado === 'critica' ? 'bg-orange-500' :
-                      estado === 'proxima' ? 'bg-yellow-500' : 'bg-green-500'
-                    }`} />
-                    
-                    <div className="h-full flex flex-col justify-between pr-6">
-                      <h4 className="font-medium text-sm leading-tight mb-2 text-white">
-                        {normativa.nombre}
-                      </h4>
-                      <div className="text-xs opacity-90 text-white">
-                        <p className="truncate" title={normativa.descripcion}>
-                          {normativa.descripcion.substring(0, 50)}...
-                        </p>
-                        <p className="mt-1 font-medium">
-                          Vence: {new Date(normativa.fechaVencimiento).toLocaleDateString('es-ES')}
-                        </p>
-                        <p className="text-xs opacity-75">
-                          {normativa.createdBy.username}
-                        </p>
+              {/* Normativas de la categoría */}
+              <div className="space-y-4">
+                {group.normativas.map((normativa) => {
+                  const estado = getEstadoVencimiento(normativa.fechaVencimiento);
+                  return (
+                    <div
+                      key={normativa._id}
+                      onClick={() => handleNormativaClick(normativa)}
+                      className={`bg-gradient-to-br ${group.colorClass} cursor-pointer hover:shadow-2xl transition-all duration-300 relative rounded-xl p-4 min-h-[140px] shadow-lg hover:scale-[1.02] hover:-translate-y-1 border border-white/20`}
+                    >
+                      {/* Indicador de estado */}
+                      <div className={`absolute top-3 right-3 w-4 h-4 rounded-full shadow-md border-2 border-white ${
+                        estado === 'vencida' ? 'bg-red-500' :
+                        estado === 'critica' ? 'bg-orange-400' :
+                        estado === 'proxima' ? 'bg-yellow-400' : 'bg-green-400'
+                      }`} />
+                      
+                      <div className="h-full flex flex-col justify-between pr-8">
+                        <h4 className="font-bold text-sm leading-tight mb-3 text-white drop-shadow-sm">
+                          {normativa.nombre}
+                        </h4>
+                        <div className="text-xs text-white/95">
+                          <p className="truncate mb-2 leading-relaxed" title={normativa.descripcion}>
+                            {normativa.descripcion.substring(0, 65)}...
+                          </p>
+                          <div className="bg-black/10 rounded-lg p-2 backdrop-blur-sm">
+                            <p className="font-semibold text-xs mb-1">
+                              📅 {new Date(normativa.fechaVencimiento).toLocaleDateString('es-ES')}
+                            </p>
+                            <p className="text-xs opacity-90">
+                              👤 {normativa.createdBy.username}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
 
-              {/* Mostrar mensaje si no hay normativas en esta categoría */}
-              {group.count === 0 && (selectedCategory === group.categoria || !selectedCategory) && (
-                <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
-                  <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No hay normativas en esta categoría</p>
-                </div>
-              )}
+                {/* Mostrar mensaje si no hay normativas en esta categoría */}
+                {group.count === 0 && (selectedCategory === group.categoria || !selectedCategory) && (
+                  <div className="p-6 border-2 border-dashed border-gray-300 rounded-xl text-center text-gray-500 bg-white/50 backdrop-blur-sm shadow-sm">
+                    <FileText className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                    <p className="text-sm font-medium">No hay normativas en esta categoría</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Mensaje cuando no hay resultados */}

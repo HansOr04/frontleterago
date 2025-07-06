@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-gray-200;
   }
   
   body {
@@ -36,48 +36,48 @@
 
   /* Gradientes para las categorías */
   .matrix-org {
-    @apply bg-gradient-to-br from-matrix-blue-1 to-matrix-blue-2;
+    @apply bg-gradient-to-br from-blue-800 to-blue-900;
   }
 
   .matrix-people {
-    @apply bg-gradient-to-br from-matrix-blue-2 to-matrix-blue-3;
+    @apply bg-gradient-to-br from-blue-700 to-blue-800;
   }
 
   .matrix-physical {
-    @apply bg-gradient-to-br from-matrix-blue-3 to-matrix-blue-4;
+    @apply bg-gradient-to-br from-blue-600 to-blue-700;
   }
 
   .matrix-tech {
-    @apply bg-gradient-to-br from-matrix-blue-4 to-matrix-blue-5;
+    @apply bg-gradient-to-br from-blue-500 to-blue-600;
   }
 
   /* Estilos para las normativas */
   .normativa-cat-1 {
-    @apply bg-gradient-to-r from-leterago-primary to-blue-700;
+    @apply bg-gradient-to-r from-blue-900 to-blue-800;
   }
 
   .normativa-cat-2 {
-    @apply bg-gradient-to-r from-blue-700 to-blue-600;
+    @apply bg-gradient-to-r from-blue-800 to-blue-700;
   }
 
   .normativa-cat-3 {
-    @apply bg-gradient-to-r from-blue-600 to-blue-500;
+    @apply bg-gradient-to-r from-blue-700 to-blue-600;
   }
 
   .normativa-cat-4 {
-    @apply bg-gradient-to-r from-blue-500 to-blue-400;
+    @apply bg-gradient-to-r from-blue-600 to-blue-500;
   }
 
   .normativa-cat-5 {
-    @apply bg-gradient-to-r from-blue-400 to-blue-300;
+    @apply bg-gradient-to-r from-blue-500 to-blue-400;
   }
 
   .normativa-cat-6 {
-    @apply bg-gradient-to-r from-blue-300 to-blue-200;
+    @apply bg-gradient-to-r from-blue-400 to-blue-300;
   }
 
   .normativa-cat-7 {
-    @apply bg-gradient-to-r from-blue-200 to-blue-100;
+    @apply bg-gradient-to-r from-blue-300 to-blue-200;
   }
 
   /* Loading spinner */

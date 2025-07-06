@@ -13,9 +13,25 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    open: true, // Abrir automáticamente en el navegador
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    // Optimizaciones para producción
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          icons: ['lucide-react'],
+          http: ['axios'],
+        },
+      },
+    },
+  },
+  // Configuración para desarrollo
+  define: {
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
   },
 })
