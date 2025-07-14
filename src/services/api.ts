@@ -3,7 +3,7 @@ import { ApiResponse, ApiConfig } from '../types/api.types';
 
 // Configuración base de la API
 const API_CONFIG: ApiConfig = {
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://leteragoback.onrender.com',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

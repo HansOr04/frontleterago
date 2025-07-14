@@ -23,7 +23,7 @@ export const APP_CONFIG = {
   version: '1.0.0',
   description: 'Sistema de gestión de normativas y anexos SOA',
   api: {
-    baseURL: 'http://localhost:5000/api',
+    baseURL: 'https://leteragoback.onrender.com',
     timeout: 10000,
   },
   pagination: {

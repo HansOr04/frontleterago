@@ -606,7 +606,7 @@ const NormativasMatrix: React.FC = () => {
       setError(null);
       
       // URL base configurable - ajusta según tu setup
-      const API_BASE_URL = 'http://localhost:5000';
+      const API_BASE_URL = 'https://leteragoback.onrender.com';
       const url = `${API_BASE_URL}/api/normativas`;
       
       console.log('Cargando normativas desde:', url);
@@ -765,7 +765,7 @@ const NormativasMatrix: React.FC = () => {
   const handleCreateNormativa = async (formData: FormData): Promise<void> => {
     try {
       // URL base configurable - ajusta según tu setup
-      const API_BASE_URL =  'http://localhost:5000';
+      const API_BASE_URL =  'https://leteragoback.onrender.com';
       const url = `${API_BASE_URL}/api/normativas`;
       
       console.log('Creando normativa en:', url);

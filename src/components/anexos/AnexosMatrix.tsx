@@ -506,7 +506,7 @@ const AnexosMatrix: React.FC = () => {
       
       const API_BASE_URL = import.meta.env?.VITE_API_URL || 
                           (window as any).env?.REACT_APP_API_URL || 
-                          'http://localhost:5000';
+                          'https://leteragoback.onrender.com';
       const url = `${API_BASE_URL}/api/anexos`;
       
       console.log('Cargando anexos desde:', url);
@@ -640,7 +640,7 @@ const AnexosMatrix: React.FC = () => {
     try {
       const API_BASE_URL = import.meta.env?.VITE_API_URL || 
                           (window as any).env?.REACT_APP_API_URL || 
-                          'http://localhost:5000';
+                          'https://leteragoback.onrender.com';
       const url = `${API_BASE_URL}/api/anexos`;
       
       console.log('Creando anexo en:', url);
