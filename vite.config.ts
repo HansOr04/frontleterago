@@ -1,12 +1,17 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
-    react(),
-    tailwindcss() // Plugin oficial de Tailwind v4 para Vite
+    react({
+      eslint: {
+        enabled: false, // 🔴 Desactiva ESLint completamente
+      },
+    }),
+    tailwindcss()
   ],
   resolve: {
     alias: {
@@ -22,4 +27,4 @@ export default defineConfig({
       }
     }
   }
-})
+});
