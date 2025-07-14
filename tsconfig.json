@@ -6,14 +6,17 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* React JSX support */
+    "jsx": "react-jsx",
+
+    /* Bundler mode for Vite */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Linting */
+    /* Linting and safety */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
