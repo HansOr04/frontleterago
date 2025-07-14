@@ -7,17 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Colores de Leterago basados en las imágenes
+        // Your existing colors will work fine with v3
         'leterago': {
-          'primary': '#1e3a8a',     // Azul oscuro principal
-          'secondary': '#3b82f6',   // Azul medio
-          'light': '#93c5fd',       // Azul claro
-          'accent': '#e91e63',      // Rosa/magenta
-          'purple': '#6366f1',      // Violeta
-          'dark': '#1e293b',        // Gris oscuro
-          'gray': '#64748b',        // Gris medio
+          'primary': '#1e3a8a',
+          'secondary': '#3b82f6',
+          'light': '#93c5fd',
+          'accent': '#e91e63',
+          'purple': '#6366f1',
+          'dark': '#1e293b',
+          'gray': '#64748b',
         },
-        // Gradientes para la matriz
         'matrix': {
           'blue-1': '#1e3a8a',
           'blue-2': '#1e40af', 
