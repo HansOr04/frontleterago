@@ -830,7 +830,7 @@ const NormativasMatrix: React.FC = () => {
         setNormativas(prev => [...prev, nuevaNormativa]);
         
         // Actualizar estadísticas
-        const today = new Date();
+
         const diasHasta = calculateDaysUntil(nuevaNormativa.fechaVencimiento);
         
         setStats(prev => ({

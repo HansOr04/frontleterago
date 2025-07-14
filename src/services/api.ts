@@ -1,5 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { ApiResponse, ApiConfig } from '../types/api.types';
+import axios, { AxiosError } from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios';
+import type { ApiResponse, ApiConfig } from '../types/api.types';
+
 
 // Configuración base de la API
 const API_CONFIG: ApiConfig = {
